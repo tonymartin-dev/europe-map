@@ -5,6 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { CountryData } from "./models/countries";
 export namespace Components {
     interface AppClickableMap {
         "activeCountries": string[] | undefined;
@@ -12,12 +13,7 @@ export namespace Components {
     interface AppFlags {
     }
     interface AppInfoModal {
-        "countryData"?: {
-    name: string,
-    capital: string,
-    population: number,
-    flag: string
-  };
+        "countryData"?: CountryData;
     }
     interface AppMap {
     }
@@ -71,12 +67,7 @@ declare namespace LocalJSX {
     interface AppFlags {
     }
     interface AppInfoModal {
-        "countryData"?: {
-    name: string,
-    capital: string,
-    population: number,
-    flag: string
-  };
+        "countryData"?: CountryData;
     }
     interface AppMap {
     }

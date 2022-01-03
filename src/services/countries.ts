@@ -5,14 +5,14 @@ export const getAllCountries = async (): Promise<CountryDataList> => {
     const countriesRawData = await fetch('https://restcountries.com/v3.1/region/europe')
     const countriesData: RawCountryData[] = await countriesRawData.json()
 
-    const countries = { }
+    const countries: CountryDataList = { }
 
     for (const countryData of countriesData) {
       countries[countryData.cca2] = {
         name: countryData.translations.spa.common,
         capital: countryData.capital[0],
         population: new Intl.NumberFormat().format(countryData.population),
-        area: countryData.area,
+        area: new Intl.NumberFormat().format(countryData.area),
         flag: countryData.flags.png,
       }
     }

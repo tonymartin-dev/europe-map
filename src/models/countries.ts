@@ -89,6 +89,7 @@ export interface CountryData {
   capital: string
   population: string
   flag: string
+  area: string
 }
 
 export type CountryDataList = Record<string, CountryData>
