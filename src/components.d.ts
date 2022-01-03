@@ -9,6 +9,8 @@ export namespace Components {
     interface AppClickableMap {
         "activeCountries": string[] | undefined;
     }
+    interface AppFlags {
+    }
     interface AppInfoModal {
         "countryData"?: {
     name: string,
@@ -28,6 +30,12 @@ declare global {
     var HTMLAppClickableMapElement: {
         prototype: HTMLAppClickableMapElement;
         new (): HTMLAppClickableMapElement;
+    };
+    interface HTMLAppFlagsElement extends Components.AppFlags, HTMLStencilElement {
+    }
+    var HTMLAppFlagsElement: {
+        prototype: HTMLAppFlagsElement;
+        new (): HTMLAppFlagsElement;
     };
     interface HTMLAppInfoModalElement extends Components.AppInfoModal, HTMLStencilElement {
     }
@@ -49,6 +57,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "app-clickable-map": HTMLAppClickableMapElement;
+        "app-flags": HTMLAppFlagsElement;
         "app-info-modal": HTMLAppInfoModalElement;
         "app-map": HTMLAppMapElement;
         "app-root": HTMLAppRootElement;
@@ -58,6 +67,8 @@ declare namespace LocalJSX {
     interface AppClickableMap {
         "activeCountries": string[] | undefined;
         "onCountryClick"?: (event: CustomEvent<string>) => void;
+    }
+    interface AppFlags {
     }
     interface AppInfoModal {
         "countryData"?: {
@@ -73,6 +84,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "app-clickable-map": AppClickableMap;
+        "app-flags": AppFlags;
         "app-info-modal": AppInfoModal;
         "app-map": AppMap;
         "app-root": AppRoot;
@@ -83,6 +95,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "app-clickable-map": LocalJSX.AppClickableMap & JSXBase.HTMLAttributes<HTMLAppClickableMapElement>;
+            "app-flags": LocalJSX.AppFlags & JSXBase.HTMLAttributes<HTMLAppFlagsElement>;
             "app-info-modal": LocalJSX.AppInfoModal & JSXBase.HTMLAttributes<HTMLAppInfoModalElement>;
             "app-map": LocalJSX.AppMap & JSXBase.HTMLAttributes<HTMLAppMapElement>;
             "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;

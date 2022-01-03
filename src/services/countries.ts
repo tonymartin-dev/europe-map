@@ -1,10 +1,9 @@
-import {  CountryData } from '../models/countries';
+import { CountryDataList, RawCountryData } from '../models/countries';
 
-export const getAllCountries = async (): Promise<Record<string, CountryData>> => {
+export const getAllCountries = async (): Promise<CountryDataList> => {
   try {
     const countriesRawData = await fetch('https://restcountries.com/v3.1/region/europe')
-    const countriesData = await countriesRawData.json()
-    console.log(countriesData);
+    const countriesData: RawCountryData[] = await countriesRawData.json()
 
     const countries = { }
 
@@ -13,13 +12,14 @@ export const getAllCountries = async (): Promise<Record<string, CountryData>> =>
         name: countryData.translations.spa.common,
         capital: countryData.capital[0],
         population: new Intl.NumberFormat().format(countryData.population),
+        area: countryData.area,
         flag: countryData.flags.png,
       }
     }
 
     return countries
   } catch (e) {
-    console.log(e);
+    console.log('[ERROR GETTING COUNTRIES DATA]', e);
     return {}
   }
 }

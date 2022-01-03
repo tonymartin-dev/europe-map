@@ -1,52 +1,38 @@
 import { Component, h } from '@stencil/core';
+import { Header } from '../header/header';
+import { SideMenu } from '../side-menu/side-menu';
+import state from '../../store/store';
+import { getAllCountries } from '../../services/countries';
 
 @Component({
   tag: 'app-root',
   styleUrl: 'app-root.css',
 })
 export class AppRoot {
+
+  componentWillLoad() {
+    getAllCountries().then(countries => state.countriesData = countries)
+  }
+
   render() {
     return (
       <ion-app>
-
         <ion-menu side="start" contentId="main">
-          <ion-header>
-            <ion-toolbar color="primary">
-              <ion-title>Start Menu</ion-title>
-            </ion-toolbar>
-          </ion-header>
-          <ion-content>
-            <ion-list>
-              <ion-item>Menu Item</ion-item>
-              <ion-item>Menu Item</ion-item>
-              <ion-item>Menu Item</ion-item>
-              <ion-item>Menu Item</ion-item>
-              <ion-item>Menu Item</ion-item>
-            </ion-list>
-          </ion-content>
+          <SideMenu />
         </ion-menu>
 
-
         <div id="main-content">
-          <ion-header>
-            <ion-toolbar>
-              <ion-buttons slot={"start"}>
-                <ion-menu-button></ion-menu-button>
-              </ion-buttons>
-              <ion-title>Países de Europa</ion-title>
-              <p slot="end">Haz click en un país coloreado para conocerlo</p>
-            </ion-toolbar>
-          </ion-header>
+          <Header />
         </div>
 
         <ion-content id="main">
           <ion-router useHash={false}>
             <ion-route url="/" component="app-map" />
-            <ion-route url="/profile/:name" component="app-profile" />
+            <ion-route url="/flags" component="app-flags" />
           </ion-router>
+          <ion-nav />
         </ion-content>
 
-        <ion-nav />
       </ion-app>
     );
   }

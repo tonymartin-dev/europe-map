@@ -11,21 +11,18 @@ export class AppClickableMap implements ComponentInterface {
   @Event() countryClick!: EventEmitter<string>
 
   @Watch('activeCountries') watchActiveCountries() {
-    console.log('watch', this.activeCountries);
     const countriesNodeList = document.querySelectorAll('#countries path')
     const countriesRefs = [...countriesNodeList[Symbol.iterator]()]
 
     for (const countryRef of countriesRefs) {
       const countryCode = countryRef.id.split('-')[0]?.toUpperCase()
       if(!this.activeCountries?.includes(countryCode)){
-        console.log('Country not found', countryCode)
         continue
       }
 
       countryRef.classList.add('clickable');
 
       countryRef.addEventListener('click', async () => {
-        console.log('active country clicked: ', countryCode);
         this.countryClick.emit(countryCode)
       });
     }

@@ -1,7 +1,7 @@
 import { Component, ComponentInterface, h, Host, JSX, State } from '@stencil/core';
 import { modalController } from '@ionic/core';
-import { getAllCountries } from '../../services/countries';
-import { CountryData } from '../../models/countries';
+import { CountryDataList } from '../../models/countries';
+import state from '../../store/store';
 
 @Component({
   tag: 'app-map',
@@ -9,27 +9,23 @@ import { CountryData } from '../../models/countries';
   scoped: true,
 })
 export class AppMap implements ComponentInterface {
-  @State() countriesData: Record<string, CountryData>
-
-  componentDidLoad() {
-    getAllCountries().then(countries => this.countriesData = countries)
-  }
 
   render(): JSX.Element {
-    const activeCountries = Object.keys(this.countriesData ?? {})
+    const countriesData = state.countriesData
+    const activeCountries = Object.keys(countriesData ?? {})
     return (
       <Host>
         <app-clickable-map
           activeCountries={activeCountries}
-          onCountryClick={({detail}) => this.openCountryModal(detail)}
+          onCountryClick={({detail}) => this.openCountryModal(detail, countriesData)}
         />
       </Host>
     );
   }
 
-  private async openCountryModal(countryCode: string) {
+  private async openCountryModal(countryCode: string, countriesData: CountryDataList) {
     console.log('openCountryModal', countryCode);
-    const countryData = this.countriesData[countryCode]
+    const countryData = countriesData[countryCode]
     const modalRef = await modalController.create({
       component: 'app-info-modal',
       componentProps: {
