@@ -1,6 +1,7 @@
 import { Component, ComponentInterface, h, Host, JSX, State, Watch } from '@stencil/core';
 import { state, onStoreChange } from '../../store/store';
 import { CountryData, CountryDataList } from '../../models/countries';
+import { failAlert, successAlert } from '../../services/feedback-alerts';
 
 @Component({
   tag: 'app-flags',
@@ -12,17 +13,14 @@ export class AppFlags implements ComponentInterface {
   @State() countriesData?: CountryDataList
 
   @Watch('countriesData') private watchCountries() {
-    console.log('watchCountries');
     if(!this.countriesData){
       return
     }
     this.country = getRandomCountry(this.countriesData)
-    console.log('Country', this.country)
   }
 
   componentWillLoad(): Promise<void> | void {
     onStoreChange('countriesData', value => {
-      console.log('change');
       this.countriesData = value
       this.watchCountries()
     })
@@ -41,7 +39,6 @@ export class AppFlags implements ComponentInterface {
 
     const flags = getRandomFlags(this.countriesData, this.country)
 
-    console.log('render', { flags, countriesData: this.countriesData, country: this.country });
     return (
       <Host>
         <div class="main-content">
@@ -54,11 +51,12 @@ export class AppFlags implements ComponentInterface {
                 class="flag"
                 src={flag}
                 alt=''
-                onClick={() => alert(country === this.country[0] ? 'Oh yeah' : 'Oooooh :(')}
+                onClick={() => this.checkCountrySelection(country)}
               />
             ))}
           </div>
 
+          <h4>Ubicación en el mapa</h4>
           <div class="small-map-container">
             <app-clickable-map activeCountries={countryCode ? [countryCode] : []} />
           </div>
@@ -66,6 +64,15 @@ export class AppFlags implements ComponentInterface {
         </div>
       </Host>
     );
+  }
+
+  private async checkCountrySelection(countryCode: string) {
+    const isCorrect = countryCode === this.country[0]
+    if(isCorrect) {
+      successAlert(() => this.watchCountries())
+    } else {
+      failAlert()
+    }
   }
 }
 
@@ -88,8 +95,6 @@ const getRandomFlags = (
     const [country, { flag }] = getRandomCountry(countries)
     flags.push({country, flag})
   }
-
-  console.log('Pre sort', flags);
 
   return flags.sort(
     (a, b) =>  a.country < b.country ? -1 : 1

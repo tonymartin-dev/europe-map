@@ -14,7 +14,6 @@ export class InfoModal implements ComponentInterface {
   private modalRef?: HTMLIonModalElement
 
   componentDidLoad() {
-    console.log('countryData', this.countryData);
     this.modalRef = this.el.closest('ion-modal')
   }
 

@@ -17,6 +17,7 @@ export class AppClickableMap implements ComponentInterface {
     for (const countryRef of countriesRefs) {
       const countryCode = countryRef.id.split('-')[0]?.toUpperCase()
       if(!this.activeCountries?.includes(countryCode)){
+        countryRef.classList.remove('clickable');
         continue
       }
 

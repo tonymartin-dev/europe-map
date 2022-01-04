@@ -24,7 +24,6 @@ export class AppMap implements ComponentInterface {
   }
 
   private async openCountryModal(countryCode: string, countriesData: CountryDataList) {
-    console.log('openCountryModal', countryCode)
     const countryData = countriesData[countryCode]
     const modalRef = await modalController.create({
       component: 'app-info-modal',
