@@ -5,10 +5,10 @@ import { failAlert, successAlert } from '../../services/feedback-alerts';
 
 @Component({
   tag: 'app-flags',
-  styleUrl: 'app-flags.pcss',
+  styleUrl: 'flags.pcss',
   scoped: true,
 })
-export class AppFlags implements ComponentInterface {
+export class Flags implements ComponentInterface {
   @State() country?: [string, CountryData]
   @State() countriesData?: CountryDataList
 

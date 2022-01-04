@@ -5,10 +5,10 @@ import { state } from '../../store/store';
 
 @Component({
   tag: 'app-map',
-  styleUrl: 'app-map.pcss',
+  styleUrl: 'map.pcss',
   scoped: true,
 })
-export class AppMap implements ComponentInterface {
+export class Map implements ComponentInterface {
 
   render(): JSX.Element {
     const countriesData = state.countriesData

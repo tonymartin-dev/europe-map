@@ -2,10 +2,10 @@ import { Component, ComponentInterface, Event, EventEmitter, h, Host, JSX, Prop,
 
 @Component({
   tag: 'app-clickable-map',
-  styleUrl: 'app-clickable-map.pcss',
+  styleUrl: 'clickable-map.pcss',
   scoped: true,
 })
-export class AppClickableMap implements ComponentInterface {
+export class ClickableMap implements ComponentInterface {
   @Prop() activeCountries!: string[] | undefined
 
   @Event() countryClick!: EventEmitter<string>

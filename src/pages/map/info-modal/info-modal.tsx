@@ -3,7 +3,7 @@ import { CountryData } from '../../../models/countries';
 
 @Component({
   tag: "app-info-modal",
-  styleUrl: "app-info-modal.pcss",
+  styleUrl: "info-modal.pcss",
   scoped: true,
 })
 export class InfoModal implements ComponentInterface {
