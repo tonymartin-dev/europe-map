@@ -12,4 +12,4 @@ onChange('countriesData', value => {
   console.log('countriesData Updated', value)
 });
 
-export default state;
+export { state, onChange as onStoreChange };

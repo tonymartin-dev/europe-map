@@ -1,7 +1,7 @@
 import { Component, h } from '@stencil/core';
 import { Header } from '../header/header';
 import { SideMenu } from '../side-menu/side-menu';
-import state from '../../store/store';
+import { state } from '../../store/store';
 import { getAllCountries } from '../../services/countries';
 
 @Component({

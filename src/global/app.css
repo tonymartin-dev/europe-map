@@ -31,3 +31,7 @@
 */
 
 @import "~@altafonte/tooltip/dist/af-tooltip/af-tooltip.css";
+
+.main-content {
+  padding: 12px 24px;
+}
