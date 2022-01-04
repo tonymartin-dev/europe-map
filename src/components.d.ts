@@ -7,10 +7,11 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { CountryData } from "./models/countries";
 export namespace Components {
+    interface AfMapWithAction {
+        "game"?: string;
+    }
     interface AppClickableMap {
         "activeCountries": string[] | undefined;
-    }
-    interface AppFlags {
     }
     interface AppInfoModal {
         "countryData"?: CountryData;
@@ -21,17 +22,17 @@ export namespace Components {
     }
 }
 declare global {
+    interface HTMLAfMapWithActionElement extends Components.AfMapWithAction, HTMLStencilElement {
+    }
+    var HTMLAfMapWithActionElement: {
+        prototype: HTMLAfMapWithActionElement;
+        new (): HTMLAfMapWithActionElement;
+    };
     interface HTMLAppClickableMapElement extends Components.AppClickableMap, HTMLStencilElement {
     }
     var HTMLAppClickableMapElement: {
         prototype: HTMLAppClickableMapElement;
         new (): HTMLAppClickableMapElement;
-    };
-    interface HTMLAppFlagsElement extends Components.AppFlags, HTMLStencilElement {
-    }
-    var HTMLAppFlagsElement: {
-        prototype: HTMLAppFlagsElement;
-        new (): HTMLAppFlagsElement;
     };
     interface HTMLAppInfoModalElement extends Components.AppInfoModal, HTMLStencilElement {
     }
@@ -52,19 +53,20 @@ declare global {
         new (): HTMLAppRootElement;
     };
     interface HTMLElementTagNameMap {
+        "af-map-with-action": HTMLAfMapWithActionElement;
         "app-clickable-map": HTMLAppClickableMapElement;
-        "app-flags": HTMLAppFlagsElement;
         "app-info-modal": HTMLAppInfoModalElement;
         "app-map": HTMLAppMapElement;
         "app-root": HTMLAppRootElement;
     }
 }
 declare namespace LocalJSX {
+    interface AfMapWithAction {
+        "game"?: string;
+    }
     interface AppClickableMap {
         "activeCountries": string[] | undefined;
         "onCountryClick"?: (event: CustomEvent<string>) => void;
-    }
-    interface AppFlags {
     }
     interface AppInfoModal {
         "countryData"?: CountryData;
@@ -74,8 +76,8 @@ declare namespace LocalJSX {
     interface AppRoot {
     }
     interface IntrinsicElements {
+        "af-map-with-action": AfMapWithAction;
         "app-clickable-map": AppClickableMap;
-        "app-flags": AppFlags;
         "app-info-modal": AppInfoModal;
         "app-map": AppMap;
         "app-root": AppRoot;
@@ -85,8 +87,8 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "af-map-with-action": LocalJSX.AfMapWithAction & JSXBase.HTMLAttributes<HTMLAfMapWithActionElement>;
             "app-clickable-map": LocalJSX.AppClickableMap & JSXBase.HTMLAttributes<HTMLAppClickableMapElement>;
-            "app-flags": LocalJSX.AppFlags & JSXBase.HTMLAttributes<HTMLAppFlagsElement>;
             "app-info-modal": LocalJSX.AppInfoModal & JSXBase.HTMLAttributes<HTMLAppInfoModalElement>;
             "app-map": LocalJSX.AppMap & JSXBase.HTMLAttributes<HTMLAppMapElement>;
             "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;

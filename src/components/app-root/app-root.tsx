@@ -28,7 +28,7 @@ export class AppRoot {
         <ion-content id="main">
           <ion-router useHash={false}>
             <ion-route url="/" component="app-map" />
-            <ion-route url="/flags" component="app-flags" />
+            <ion-route url="/map-game/:game" component="af-map-with-action" />
           </ion-router>
           <ion-nav />
         </ion-content>
