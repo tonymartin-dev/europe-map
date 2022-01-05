@@ -6,6 +6,7 @@ import { GuessCountryName } from './components/guess-country-name';
 import { FindTheFlag } from './components/find-the-flag';
 import { failAlert, successAlert } from '../../services/feedback-alerts';
 import { GuessCapital } from './components/guess-capital';
+import { GuessMorePopulation } from './components/guess-more-population';
 
 @Component({
   tag: 'af-map-with-action',
@@ -44,7 +45,12 @@ export class MapWithAction implements ComponentInterface {
       return ''
     }
 
-    const countryCode = this.country?.[0]
+    let activeCountries
+    if(this.game === "find-more-population") {
+      activeCountries = this.countriesOptions.map(option => option.code)
+    } else {
+      activeCountries = this.country?.[0] ? [this.country?.[0]] : []
+    }
 
     return (
       <Host>
@@ -53,7 +59,7 @@ export class MapWithAction implements ComponentInterface {
           {this.renderAction()}
 
           <div class="small-map-container">
-            <app-clickable-map activeCountries={countryCode ? [countryCode] : []} />
+            <app-clickable-map activeCountries={activeCountries} showTooltip={this.game !== 'find-country'}/>
           </div>
         </div>
       </Host>
@@ -79,6 +85,11 @@ export class MapWithAction implements ComponentInterface {
           options={this.countriesOptions}
           onClick={(code) => this.checkCountrySelection(code) }
         />
+      case 'find-more-population':
+        return <GuessMorePopulation
+          options={this.countriesOptions}
+          onClick={(code) => this.getMorePopulated(code, this.countriesOptions) }
+        />
       default:
         return <p>Game not found</p>
     }
@@ -86,10 +97,29 @@ export class MapWithAction implements ComponentInterface {
 
   private async checkCountrySelection(countryCode: string) {
     const isCorrect = countryCode === this.country[0]
+    this.showAlert(isCorrect)
+  }
+
+  private getMorePopulated (selected: string, options: CountryData[]) {
+    const selectedPopulation = options.find(option => option.code === selected)?.population
+
+    if(!selectedPopulation){
+      alert('Se ha producido un error')
+    }
+
+    const allPopulations = options.map(option => Number.parseInt(option.population))
+    const maxPopulation = Math.max(...allPopulations)
+    const isCorrect = Number.parseInt(selectedPopulation) === maxPopulation
+
+    this.showAlert(isCorrect)
+  }
+
+  private showAlert (isCorrect?: boolean) {
     if(isCorrect) {
       successAlert(() => this.watchCountries())
     } else {
       failAlert()
     }
   }
+
 }

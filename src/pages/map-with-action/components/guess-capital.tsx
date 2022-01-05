@@ -17,5 +17,7 @@ export const GuessCapital: FunctionalComponent<GuessCapitalProps> = (
     {options?.map(({ capital, code }) => (
       <ion-button onClick={() => onClick(code)}> {capital} </ion-button>
     ))}
+
+    <h4>Ubicación en el mapa</h4>
   </div>;
 };
