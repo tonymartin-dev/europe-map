@@ -1,4 +1,4 @@
-import { Component, h } from '@stencil/core';
+import { Component, Element, h } from '@stencil/core';
 import { Header } from '../header/header';
 import { SideMenu } from '../side-menu/side-menu';
 import { state } from '../../store/store';
@@ -9,6 +9,7 @@ import { getAllCountries } from '../../services/countries';
   styleUrl: 'app-root.css',
 })
 export class AppRoot {
+  @Element() el: HTMLAppRootElement
 
   componentWillLoad() {
     getAllCountries().then(countries => state.countriesData = countries)
@@ -18,7 +19,7 @@ export class AppRoot {
     return (
       <ion-app>
         <ion-menu side="start" contentId="main">
-          <SideMenu />
+          <SideMenu parentRef={this.el}/>
         </ion-menu>
 
         <div id="main-content">
