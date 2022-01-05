@@ -5,6 +5,7 @@ import { onStoreChange, state } from '../../store/store';
 import { GuessCountryName } from './components/guess-country-name';
 import { FindTheFlag } from './components/find-the-flag';
 import { failAlert, successAlert } from '../../services/feedback-alerts';
+import { GuessCapital } from './components/guess-capital';
 
 @Component({
   tag: 'af-map-with-action',
@@ -68,6 +69,12 @@ export class MapWithAction implements ComponentInterface {
         />
       case 'find-flag':
         return <FindTheFlag
+          selectedCountry={this.country[1]}
+          options={this.countriesOptions}
+          onClick={(code) => this.checkCountrySelection(code) }
+        />
+      case 'find-capital':
+        return <GuessCapital
           selectedCountry={this.country[1]}
           options={this.countriesOptions}
           onClick={(code) => this.checkCountrySelection(code) }
