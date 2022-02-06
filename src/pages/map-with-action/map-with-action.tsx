@@ -31,9 +31,9 @@ export class MapWithAction implements ComponentInterface {
       state.activeCountries = this.countriesOptions.map(option => option.code)
       this.country = getHigherPopulationCountry(this.countriesOptions)
     } else {
-      state.activeCountries = this.country?.code ? [this.country.code] : []
       const randomIndex = Math.floor(Math.random() * (this.countriesOptions.length - 1))
       this.country = this.countriesOptions[randomIndex]
+      state.activeCountries = this.country?.code ? [this.country.code] : []
     }
   }
 
