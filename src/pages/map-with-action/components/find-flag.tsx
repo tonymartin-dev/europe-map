@@ -7,7 +7,7 @@ export interface FindTheFlagProps {
   onClick?: (countryCode: string) => void
 }
 
-export const FindTheFlag: FunctionalComponent<FindTheFlagProps> = (
+export const FindFlag: FunctionalComponent<FindTheFlagProps> = (
   {selectedCountry, options, onClick}
 ) => {
   return <div>

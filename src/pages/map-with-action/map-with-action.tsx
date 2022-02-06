@@ -3,7 +3,7 @@ import { CountryData, CountryDataList } from '../../models/countries';
 import { getHigherPopulationCountry, getRandomCountries } from '../../services/countries';
 import { onStoreChange, state } from '../../store/store';
 import { GuessCountryName } from './components/guess-country-name';
-import { FindTheFlag } from './components/find-the-flag';
+import { FindFlag } from './components/find-flag';
 import { failAlert, successAlert } from '../../services/feedback-alerts';
 import { GuessCapital } from './components/guess-capital';
 import { GuessMostPopulated } from './components/guess-most-populated';
@@ -27,7 +27,7 @@ export class MapWithAction implements ComponentInterface {
     }
     this.countriesOptions = getRandomCountries(this.countriesData)
 
-    if(this.game === "find-most-populated") {
+    if(this.game === "guess-most-populated") {
       state.activeCountries = this.countriesOptions.map(option => option.code)
       this.country = getHigherPopulationCountry(this.countriesOptions)
     } else {
@@ -62,7 +62,7 @@ export class MapWithAction implements ComponentInterface {
           {this.renderAction()}
 
           <div class="small-map-container">
-            <app-clickable-map activeCountries={state.activeCountries} showTooltip={this.game !== 'find-country'}/>
+            <app-clickable-map activeCountries={state.activeCountries} showTooltip={false}/>
           </div>
         </div>
       </Host>
@@ -71,24 +71,24 @@ export class MapWithAction implements ComponentInterface {
 
   private renderAction() {
     switch (this.game) {
-      case 'find-country':
+      case 'guess-country-name':
         return <GuessCountryName
           options={this.countriesOptions}
           onClick={(code) => this.checkCountrySelection(code) }
         />
       case 'find-flag':
-        return <FindTheFlag
+        return <FindFlag
           selectedCountry={this.country}
           options={this.countriesOptions}
           onClick={(code) => this.checkCountrySelection(code) }
         />
-      case 'find-capital':
+      case 'guess-capital':
         return <GuessCapital
           selectedCountry={this.country}
           options={this.countriesOptions}
           onClick={(code) => this.checkCountrySelection(code) }
         />
-      case 'find-most-populated':
+      case 'guess-most-populated':
         return <GuessMostPopulated
           options={this.countriesOptions}
           onClick={(code) => this.checkCountrySelection(code) }
@@ -100,7 +100,7 @@ export class MapWithAction implements ComponentInterface {
 
   private async checkCountrySelection(countryCode: string) {
     const isCorrect = countryCode === this.country.code
-    const extraMsg = this.game === "find-most-populated"
+    const extraMsg = this.game === "guess-most-populated"
       ? `${this.country.name} tiene ${this.country.population} habitantes.`
       : undefined
     this.showAlert(isCorrect, extraMsg)

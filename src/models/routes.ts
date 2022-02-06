@@ -1,12 +1,12 @@
 export type GameType =
-  | 'find-country'
   | 'find-flag'
-  | 'find-capital'
-  | 'find-most-populated'
+  | 'guess-country-name'
+  | 'guess-capital'
+  | 'guess-most-populated'
 
 export const GAME_ROUTES =[
-  'find-country',
   'find-flag',
-  'find-capital',
-  'find-most-populated',
+  'guess-country-name',
+  'guess-capital',
+  'guess-most-populated',
 ]
