@@ -24,6 +24,9 @@ export const SideMenu: FunctionalComponent<SideMenuProps> = ({parentRef}) => {
       <ion-item {...menuLink("/map-game/guess-most-populated", parentRef)}>
         ¿Dónde vive más gente?
       </ion-item>
+      <ion-item {...menuLink("/map-game/find-country", parentRef)}>
+        Encuentra el país
+      </ion-item>
     </ion-list>
   </ion-content>;
 }

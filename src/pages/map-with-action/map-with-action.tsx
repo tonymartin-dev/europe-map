@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, h, Host, JSX, Prop, State, Watch } from '@stencil/core';
 import { CountryData, CountryDataList } from '../../models/countries';
-import { getHigherPopulationCountry, getRandomCountries } from '../../services/countries';
+import { getHigherPopulationCountry, getRandomCountries, getRandomCountry } from '../../services/countries';
 import { onStoreChange, state } from '../../store/store';
 import { GuessCountryName } from './components/guess-country-name';
 import { FindFlag } from './components/find-flag';
@@ -8,6 +8,7 @@ import { failAlert, successAlert } from '../../services/feedback-alerts';
 import { GuessCapital } from './components/guess-capital';
 import { GuessMostPopulated } from './components/guess-most-populated';
 import { GameType } from '../../models/routes';
+import { FindCountry } from './components/find-country';
 
 @Component({
   tag: 'af-map-with-action',
@@ -25,16 +26,26 @@ export class MapWithAction implements ComponentInterface {
     if(!this.countriesData || !Object.keys(this.countriesData).length){
       return
     }
+
+    if(this.game === "find-country"){
+      // ToDO: avoid countries with a width less than 15, because they can't be clicked
+      this.country = getRandomCountry(this.countriesData)[1]
+      state.activeCountries = Object.values(this.countriesData).map(option => option.code)
+      return
+    }
+
     this.countriesOptions = getRandomCountries(this.countriesData)
 
     if(this.game === "guess-most-populated") {
       state.activeCountries = this.countriesOptions.map(option => option.code)
       this.country = getHigherPopulationCountry(this.countriesOptions)
-    } else {
-      const randomIndex = Math.floor(Math.random() * (this.countriesOptions.length - 1))
-      this.country = this.countriesOptions[randomIndex]
-      state.activeCountries = this.country?.code ? [this.country.code] : []
+      return
     }
+
+    const randomIndex = Math.floor(Math.random() * (this.countriesOptions.length - 1))
+    this.country = this.countriesOptions[randomIndex]
+    state.activeCountries = this.country?.code ? [this.country.code] : []
+
   }
 
   componentWillLoad(): Promise<void> | void {
@@ -62,7 +73,20 @@ export class MapWithAction implements ComponentInterface {
           {this.renderAction()}
 
           <div class="small-map-container">
-            <app-clickable-map activeCountries={state.activeCountries} showTooltip={false} highlightActive/>
+            {this.game === "find-country" ? (
+              <app-clickable-map
+                activeCountries={state.activeCountries}
+                showTooltip={false}
+                onCountryClick={({detail}) => this.checkCountrySelection(detail)}
+              />
+            ) : (
+              <app-clickable-map
+                activeCountries={state.activeCountries}
+                showTooltip={false}
+                highlightActive
+              />
+            )}
+
           </div>
         </div>
       </Host>
@@ -93,12 +117,15 @@ export class MapWithAction implements ComponentInterface {
           options={this.countriesOptions}
           onClick={(code) => this.checkCountrySelection(code) }
         />
+      case 'find-country':
+        return <FindCountry selectedCountry={this.country}/>
       default:
         return <p>Game not found</p>
     }
   }
 
   private async checkCountrySelection(countryCode: string) {
+    console.log('checkCountrySelection');
     const isCorrect = countryCode === this.country.code
     const extraMsg = this.game === "guess-most-populated"
       ? `${this.country.name} tiene ${this.country.population} habitantes.`

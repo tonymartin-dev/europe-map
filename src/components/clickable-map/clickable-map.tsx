@@ -26,11 +26,17 @@ export class ClickableMap implements ComponentInterface {
         continue
       }
 
+
       countryRef.classList.add('clickable');
+
+      if(countryRef.getAttribute('has-click-event') === 'true'){
+        continue
+      }
 
       countryRef.addEventListener('click', async () => {
         this.countryClick.emit(countryCode)
       });
+      countryRef.setAttribute('has-click-event', 'true')
     }
   }
 
