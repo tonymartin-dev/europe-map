@@ -5,10 +5,11 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { GameType } from "./models/routes";
 import { CountryData } from "./models/countries";
 export namespace Components {
     interface AfMapWithAction {
-        "game"?: string;
+        "game"?: GameType;
     }
     interface AppClickableMap {
         "activeCountries": string[] | undefined;
@@ -63,7 +64,7 @@ declare global {
 }
 declare namespace LocalJSX {
     interface AfMapWithAction {
-        "game"?: string;
+        "game"?: GameType;
     }
     interface AppClickableMap {
         "activeCountries": string[] | undefined;

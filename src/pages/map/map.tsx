@@ -11,12 +11,17 @@ import { state } from '../../store/store';
 export class Map implements ComponentInterface {
 
   render(): JSX.Element {
+    // Prevent component to be loaded twice because of ionic router behavior
+    if(state.isGameRoute ) {
+      return ''
+    }
+
     const countriesData = state.countriesData
-    const activeCountries = Object.keys(countriesData ?? {})
+    state.activeCountries = Object.keys(countriesData ?? {})
     return (
       <Host>
         <app-clickable-map
-          activeCountries={activeCountries}
+          activeCountries={state.activeCountries}
           onCountryClick={({detail}) => this.openCountryModal(detail, countriesData)}
         />
       </Host>

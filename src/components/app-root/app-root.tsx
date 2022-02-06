@@ -27,7 +27,9 @@ export class AppRoot {
         </div>
 
         <ion-content id="main">
-          <ion-router useHash={false}>
+          <ion-router useHash={false} onIonRouteWillChange={e => {
+            state.route = e.detail.to
+          }}>
             <ion-route url="/" component="app-map" />
             <ion-route url="/map-game/:game" component="af-map-with-action" />
           </ion-router>

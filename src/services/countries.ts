@@ -1,5 +1,8 @@
 import { CountryData, CountryDataList, RawCountryData } from '../models/countries';
 
+// ToDo: make it editable by setting difficulty level
+const DEFAULT_COUNTRIES_OPTIONS = 3
+
 export const getAllCountries = async (): Promise<CountryDataList> => {
   try {
     const countriesRawData = await fetch('https://restcountries.com/v3.1/region/europe')
@@ -33,36 +36,23 @@ export const getRandomCountry = (countries: CountryDataList) => {
   return countriesArray[randomIndex]
 }
 
-export const getRandomFlags = (
-  countries: CountryDataList,
-  selectedCountry: [string, CountryData],
-  numberOfFlags = 3
-) => {
-  delete countries[selectedCountry[0]]
-  const flags = [{country: selectedCountry[0], flag: selectedCountry[1].flag}]
-
-  while (flags.length < numberOfFlags) {
-    const [country, { flag }] = getRandomCountry(countries)
-    flags.push({country, flag})
-  }
-
-  return flags.sort(
-    (a, b) =>  a.country < b.country ? -1 : 1
-  )
-}
-
 export const getRandomCountries = (
   allCountries: CountryDataList,
   selectedCountry: [string, CountryData],
-  numberOfFlags = 3
+  numberOfCountries = DEFAULT_COUNTRIES_OPTIONS
 ) => {
+  if(!selectedCountry){
+    return
+  }
   delete allCountries[selectedCountry[0]]
   const randomCountries = [selectedCountry[1]]
 
-  while (randomCountries.length < numberOfFlags) {
-    const [_countryCode, countryData] = getRandomCountry(allCountries)
+  while (randomCountries.length < numberOfCountries) {
+    const [, countryData] = getRandomCountry(allCountries)
     randomCountries.push(countryData)
   }
 
-  return randomCountries
+  console.log({randomCountries});
+
+  return [...randomCountries].sort((a,b) => a.code > b.code ? -1 : 1)
 }

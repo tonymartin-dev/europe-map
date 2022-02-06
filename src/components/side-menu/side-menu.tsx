@@ -34,12 +34,10 @@ const menuLink = (url: string, parentRef?: HTMLAppRootElement) => {
 }
 
 const closeMenu = (parentRef?: HTMLAppRootElement) => {
-  console.log('hello');
   if(!parentRef){
     return
   }
   const menuRef = parentRef.querySelector('ion-menu')
-  console.log({menuRef });
   if (menuRef) {
     menuRef?.close()
   }

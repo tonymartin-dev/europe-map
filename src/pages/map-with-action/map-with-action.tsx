@@ -7,6 +7,7 @@ import { FindTheFlag } from './components/find-the-flag';
 import { failAlert, successAlert } from '../../services/feedback-alerts';
 import { GuessCapital } from './components/guess-capital';
 import { GuessMorePopulation } from './components/guess-more-population';
+import { GameType } from '../../models/routes';
 
 @Component({
   tag: 'af-map-with-action',
@@ -14,7 +15,7 @@ import { GuessMorePopulation } from './components/guess-more-population';
   scoped: true,
 })
 export class MapWithAction implements ComponentInterface {
-  @Prop() game?: string
+  @Prop() game?: GameType
 
   @State() country?: [string, CountryData]
   @State() countriesData?: CountryDataList
@@ -26,30 +27,30 @@ export class MapWithAction implements ComponentInterface {
     }
     this.country = getRandomCountry(this.countriesData)
     this.countriesOptions = getRandomCountries(this.countriesData, this.country)
+
+    if(this.game === "find-more-population") {
+      state.activeCountries = this.countriesOptions.map(option => option.code)
+    } else {
+      state.activeCountries = this.country?.[0] ? [this.country?.[0]] : []
+    }
   }
 
   componentWillLoad(): Promise<void> | void {
     console.log('GAME', this.game)
 
     onStoreChange('countriesData', value => {
-      this.countriesData = value
+      this.countriesData = { ...value }
       this.watchCountries()
     })
 
-    this.countriesData = state.countriesData
+    this.countriesData = { ...state.countriesData }
     this.watchCountries()
   }
 
   render(): JSX.Element {
-    if(!this.country) {
+    // Prevent component to be loaded twice because of ionic router behavior
+    if(!this.country || !state.isGameRoute ) {
       return ''
-    }
-
-    let activeCountries
-    if(this.game === "find-more-population") {
-      activeCountries = this.countriesOptions.map(option => option.code)
-    } else {
-      activeCountries = this.country?.[0] ? [this.country?.[0]] : []
     }
 
     return (
@@ -59,7 +60,7 @@ export class MapWithAction implements ComponentInterface {
           {this.renderAction()}
 
           <div class="small-map-container">
-            <app-clickable-map activeCountries={activeCountries} showTooltip={this.game !== 'find-country'}/>
+            <app-clickable-map activeCountries={state.activeCountries} showTooltip={this.game !== 'find-country'}/>
           </div>
         </div>
       </Host>
