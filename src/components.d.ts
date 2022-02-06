@@ -13,6 +13,7 @@ export namespace Components {
     }
     interface AppClickableMap {
         "activeCountries": string[] | undefined;
+        "highlightActive": boolean;
         "showTooltip": boolean;
     }
     interface AppInfoModal {
@@ -68,6 +69,7 @@ declare namespace LocalJSX {
     }
     interface AppClickableMap {
         "activeCountries": string[] | undefined;
+        "highlightActive"?: boolean;
         "onCountryClick"?: (event: CustomEvent<string>) => void;
         "showTooltip"?: boolean;
     }

@@ -62,7 +62,7 @@ export class MapWithAction implements ComponentInterface {
           {this.renderAction()}
 
           <div class="small-map-container">
-            <app-clickable-map activeCountries={state.activeCountries} showTooltip={false}/>
+            <app-clickable-map activeCountries={state.activeCountries} showTooltip={false} highlightActive/>
           </div>
         </div>
       </Host>

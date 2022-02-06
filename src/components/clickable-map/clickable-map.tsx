@@ -9,8 +9,9 @@ import { CountryDataList } from '../../models/countries';
   scoped: true,
 })
 export class ClickableMap implements ComponentInterface {
-  @Prop() activeCountries!: string[] | undefined
-  @Prop() showTooltip: boolean = true
+  @Prop() readonly activeCountries!: string[] | undefined
+  @Prop() readonly showTooltip: boolean = true
+  @Prop() readonly highlightActive: boolean = false
 
   @Event() countryClick!: EventEmitter<string>
 
@@ -42,7 +43,7 @@ export class ClickableMap implements ComponentInterface {
 
     return (
       <Host>
-        <svg viewBox="0 10 750 600" id="countries">
+        <svg viewBox="0 10 750 600" id="countries" class={this.highlightActive ? 'highlight' : ''}>
           <desc
             id="desc6"> A blank Map of Europe. Every country has an id which is its ISO-3166-1-ALPHA2 code in lower case.
             Members of the EU have a class=&quot;eu&quot;, countries in europe (which I found turkey to be but russia not) have a class=&quot;europe&quot;.
