@@ -16,12 +16,14 @@ export const SideMenu: FunctionalComponent<SideMenuProps> = ({parentRef}) => {
         Encuentra la bandera
       </ion-item>
       <ion-item {...menuLink("/map-game/find-country", parentRef)}>
-        Busca el país
+        Adivina el país
       </ion-item>
       <ion-item {...menuLink("/map-game/find-capital", parentRef)}>
         Adivina la capital
       </ion-item>
-      <ion-item>¿Dónde vive más gente?</ion-item>
+      <ion-item {...menuLink("/map-game/find-most-populated", parentRef)}>
+        ¿Dónde vive más gente?
+      </ion-item>
     </ion-list>
   </ion-content>;
 }

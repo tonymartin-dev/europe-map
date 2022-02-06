@@ -5,7 +5,7 @@ export interface HeaderProps {
 
 export const Header: FunctionalComponent<HeaderProps> = () => {
   return <ion-header>
-    <ion-toolbar>
+    <ion-toolbar style={{padding: "0 12px"}}>
       <ion-buttons slot={"start"}>
         <ion-menu-button></ion-menu-button>
       </ion-buttons>

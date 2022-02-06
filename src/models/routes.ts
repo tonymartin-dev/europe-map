@@ -2,11 +2,11 @@ export type GameType =
   | 'find-country'
   | 'find-flag'
   | 'find-capital'
-  | 'find-more-population'
+  | 'find-most-populated'
 
 export const GAME_ROUTES =[
   'find-country',
   'find-flag',
   'find-capital',
-  'find-more-population',
+  'find-most-populated',
 ]

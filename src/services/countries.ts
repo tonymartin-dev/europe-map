@@ -1,7 +1,7 @@
 import { CountryData, CountryDataList, RawCountryData } from '../models/countries';
 
 // ToDo: make it editable by setting difficulty level
-const DEFAULT_COUNTRIES_OPTIONS = 3
+export const DEFAULT_COUNTRIES_OPTIONS = 3
 
 export const getAllCountries = async (): Promise<CountryDataList> => {
   try {
@@ -38,21 +38,30 @@ export const getRandomCountry = (countries: CountryDataList) => {
 
 export const getRandomCountries = (
   allCountries: CountryDataList,
-  selectedCountry: [string, CountryData],
   numberOfCountries = DEFAULT_COUNTRIES_OPTIONS
 ) => {
-  if(!selectedCountry){
-    return
-  }
-  delete allCountries[selectedCountry[0]]
-  const randomCountries = [selectedCountry[1]]
+  const randomCountries: CountryData[] = []
 
   while (randomCountries.length < numberOfCountries) {
     const [, countryData] = getRandomCountry(allCountries)
-    randomCountries.push(countryData)
+    if(!randomCountries.some(c => c.code === countryData.code )) {
+      randomCountries.push(countryData);
+    }
   }
 
   console.log({randomCountries});
 
   return [...randomCountries].sort((a,b) => a.code > b.code ? -1 : 1)
 }
+
+export const getHigherPopulationCountry = (countriesOptions: CountryData[]) => {
+  const higherPopulation = Math.max(...countriesOptions.map(
+    option => getIntFromString(option.population)
+  ))
+  return countriesOptions.find(
+    option => getIntFromString(option.population) === higherPopulation
+  )
+}
+
+const getIntFromString = (string: string) =>
+  Number.parseInt(string.replace(/\./g,''))

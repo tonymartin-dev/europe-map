@@ -1,9 +1,9 @@
 import { alertController } from '@ionic/core';
 
-export const successAlert = async (onClose?: () => void) => {
+export const successAlert = async (extraMsg?: string, onClose?: () => void) => {
   const alertRef = await alertController.create({
     header: 'Correcto',
-    message: '¡Has acertado! 😀',
+    message: `¡Has acertado! 😀${extraMsg ? '\n' + extraMsg : ''}`,
     buttons: ['Continuar']
   })
 

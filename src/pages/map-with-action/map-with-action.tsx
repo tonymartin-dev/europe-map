@@ -1,12 +1,12 @@
 import { Component, ComponentInterface, h, Host, JSX, Prop, State, Watch } from '@stencil/core';
 import { CountryData, CountryDataList } from '../../models/countries';
-import { getRandomCountries, getRandomCountry } from '../../services/countries';
+import { getHigherPopulationCountry, getRandomCountries } from '../../services/countries';
 import { onStoreChange, state } from '../../store/store';
 import { GuessCountryName } from './components/guess-country-name';
 import { FindTheFlag } from './components/find-the-flag';
 import { failAlert, successAlert } from '../../services/feedback-alerts';
 import { GuessCapital } from './components/guess-capital';
-import { GuessMorePopulation } from './components/guess-more-population';
+import { GuessMostPopulated } from './components/guess-most-populated';
 import { GameType } from '../../models/routes';
 
 @Component({
@@ -17,21 +17,23 @@ import { GameType } from '../../models/routes';
 export class MapWithAction implements ComponentInterface {
   @Prop() game?: GameType
 
-  @State() country?: [string, CountryData]
+  @State() country?: CountryData
   @State() countriesData?: CountryDataList
   @State() countriesOptions: CountryData[] = []
 
   @Watch('countriesData') private watchCountries() {
-    if(!this.countriesData){
+    if(!this.countriesData || !Object.keys(this.countriesData).length){
       return
     }
-    this.country = getRandomCountry(this.countriesData)
-    this.countriesOptions = getRandomCountries(this.countriesData, this.country)
+    this.countriesOptions = getRandomCountries(this.countriesData)
 
-    if(this.game === "find-more-population") {
+    if(this.game === "find-most-populated") {
       state.activeCountries = this.countriesOptions.map(option => option.code)
+      this.country = getHigherPopulationCountry(this.countriesOptions)
     } else {
-      state.activeCountries = this.country?.[0] ? [this.country?.[0]] : []
+      state.activeCountries = this.country?.code ? [this.country.code] : []
+      const randomIndex = Math.floor(Math.random() * (this.countriesOptions.length - 1))
+      this.country = this.countriesOptions[randomIndex]
     }
   }
 
@@ -76,20 +78,20 @@ export class MapWithAction implements ComponentInterface {
         />
       case 'find-flag':
         return <FindTheFlag
-          selectedCountry={this.country[1]}
+          selectedCountry={this.country}
           options={this.countriesOptions}
           onClick={(code) => this.checkCountrySelection(code) }
         />
       case 'find-capital':
         return <GuessCapital
-          selectedCountry={this.country[1]}
+          selectedCountry={this.country}
           options={this.countriesOptions}
           onClick={(code) => this.checkCountrySelection(code) }
         />
-      case 'find-more-population':
-        return <GuessMorePopulation
+      case 'find-most-populated':
+        return <GuessMostPopulated
           options={this.countriesOptions}
-          onClick={(code) => this.getMorePopulated(code, this.countriesOptions) }
+          onClick={(code) => this.checkCountrySelection(code) }
         />
       default:
         return <p>Game not found</p>
@@ -97,27 +99,16 @@ export class MapWithAction implements ComponentInterface {
   }
 
   private async checkCountrySelection(countryCode: string) {
-    const isCorrect = countryCode === this.country[0]
-    this.showAlert(isCorrect)
+    const isCorrect = countryCode === this.country.code
+    const extraMsg = this.game === "find-most-populated"
+      ? `${this.country.name} tiene ${this.country.population} habitantes.`
+      : undefined
+    this.showAlert(isCorrect, extraMsg)
   }
 
-  private getMorePopulated (selected: string, options: CountryData[]) {
-    const selectedPopulation = options.find(option => option.code === selected)?.population
-
-    if(!selectedPopulation){
-      alert('Se ha producido un error')
-    }
-
-    const allPopulations = options.map(option => Number.parseInt(option.population))
-    const maxPopulation = Math.max(...allPopulations)
-    const isCorrect = Number.parseInt(selectedPopulation) === maxPopulation
-
-    this.showAlert(isCorrect)
-  }
-
-  private showAlert (isCorrect?: boolean) {
+  private showAlert (isCorrect?: boolean, extraMsg?: string) {
     if(isCorrect) {
-      successAlert(() => this.watchCountries())
+      successAlert(extraMsg, () => this.watchCountries())
     } else {
       failAlert()
     }

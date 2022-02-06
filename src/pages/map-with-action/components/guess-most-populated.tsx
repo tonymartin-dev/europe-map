@@ -6,7 +6,7 @@ export interface GuessMorePopulationProps {
   onClick?: (countryCode: string) => void
 }
 
-export const GuessMorePopulation: FunctionalComponent<GuessMorePopulationProps> = (
+export const GuessMostPopulated: FunctionalComponent<GuessMorePopulationProps> = (
   {options, onClick}
 ) => {
   return <div>
