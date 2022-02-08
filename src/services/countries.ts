@@ -22,7 +22,7 @@ export const getAllCountries = async (): Promise<CountryDataList> => {
       }
       countries[countryData.cca2] = {
         name: countryData.translations.spa.common,
-        capital: countryData.capital[0],
+        capital: translateCapital(countryData.translations.spa.common, countryData.capital[0]),
         population: new Intl.NumberFormat().format(countryData.population),
         area: new Intl.NumberFormat().format(countryData.area),
         flag: countryData.flags.png,
@@ -103,4 +103,74 @@ export const getAlertExtraMessage = (gameType: GameType, selectedCountryCode: st
   }
 
   return messages[gameType]
+}
+
+const translateCapital = (name?: string, capital?: string) => {
+  if(!name || !capital) {
+    return
+  }
+
+  const capitalData = Object.entries(capitalsInSpanish).find(([countryName]) => countryName === name)
+  const capitalInSpanish = capitalData?.[1]
+
+  if(capitalInSpanish) {
+    // console.log(`CAPITAL TRADUCIDA: ${capital} => ${capitalInSpanish}`);
+  } else {
+    console.log(`CAPITAL SIN TRADUCIR: ${capital} (${name})`);
+  }
+
+  return capitalInSpanish ?? capital
+}
+
+const capitalsInSpanish = {
+  "Albania": "Tirana",
+  "Alemania": "Berlín",
+  "Andorra": "Andorra La Vieja",
+  "Armenia": "Ereván",
+  "Austria": "Viena",
+  "Azerbaiyán": "Bakú",
+  "Bélgica": "Bruselas",
+  "Bielorrusia": "Minsk",
+  "Bosnia y Herzegovina": "Sarajevo",
+  "Bulgaria": "Sofía",
+  "Chipre": "Nicosia",
+  "Ciudad del Vaticano": "Ciudad del Vaticano",
+  "Croacia": "Zagreb",
+  "Dinamarca": "Copenhague",
+  "República Eslovaca": "Bratislava",
+  "Eslovenia": "Liubliana",
+  "España": "Madrid",
+  "Estonia": "Tallín",
+  "Finlandia": "Helsinki",
+  "Francia": "París",
+  "Georgia": "Tiflis",
+  "Grecia": "Atenas",
+  "Hungría": "Budapest",
+  "Irlanda": "Dublín",
+  "Islandia": "Reikiavik",
+  "Italia": "Roma",
+  "Kazajistán": "Nursultán",
+  "Letonia": "Riga",
+  "Liechtenstein": "Vaduz",
+  "Lituania": "Vilna",
+  "Luxemburgo": "Luxemburgo",
+  "Macedonia del Norte": "Skopie",
+  "Malta": "La Valeta",
+  "Moldavia": "Chisinau",
+  "Mónaco": "Mónaco",
+  "Montenegro": "Podgorica",
+  "Noruega": "Oslo",
+  "Países Bajos": "Ámsterdam",
+  "Polonia": "Varsovia",
+  "Portugal": "Lisboa",
+  "Reino Unido": "Londres",
+  "Chequia": "Praga",
+  "Rumania": "Bucarest",
+  "Rusia": "Moscú",
+  "San Marino": "San Marino",
+  "Serbia": "Belgrado",
+  "Suecia": "Estocolmo",
+  "Suiza": "Berna",
+  "Turquía": "Ankara",
+  "Ucrania": "Kiev",
 }
