@@ -1,4 +1,5 @@
 import { FunctionalComponent, h } from '@stencil/core';
+import { state } from '../../store/store';
 
 export interface HeaderProps {
 }
@@ -10,7 +11,7 @@ export const Header: FunctionalComponent<HeaderProps> = () => {
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
       <ion-router-link href="/"><ion-title>Países de Europa</ion-title></ion-router-link>
-      <p slot="end">Haz click en un país coloreado para conocerlo</p>
+      <p slot="end">Puntos: <span>{state.points}</span></p>
     </ion-toolbar>
   </ion-header>;
 };

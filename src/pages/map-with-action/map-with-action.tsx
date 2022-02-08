@@ -27,6 +27,7 @@ export class MapWithAction implements ComponentInterface {
   @State() country?: CountryData
   @State() countriesData?: CountryDataList
   @State() countriesOptions: CountryData[] = []
+  @State() attempts = 0
 
 
   @Watch('countriesData') private watchCountries() {
@@ -141,6 +142,7 @@ export class MapWithAction implements ComponentInterface {
   private async checkCountrySelection(countryCode: string) {
     const isCorrect = countryCode === this.country.code
     const extraMsg = getAlertExtraMessage(this.game, countryCode)
+    this.updatePoints(isCorrect)
     this.showAlert(isCorrect, extraMsg)
   }
 
@@ -148,8 +150,18 @@ export class MapWithAction implements ComponentInterface {
     if(isCorrect) {
       successAlert(extraMsg, () => this.watchCountries())
     } else {
-      failAlert(extraMsg)
+      failAlert(extraMsg, this.attempts >= 2 ? () => this.watchCountries() : undefined)
+    }
+  }
+
+
+  private updatePoints(isCorrect: boolean) {
+    if(isCorrect){
+      state.points += 5
+    } else {
+      state.points = state.points < 2 ? 0 : state.points - 2
     }
   }
 
 }
+

@@ -7,14 +7,16 @@ const { state, onChange }: {
     countriesData?: CountryDataList,
     activeCountries: string[],
     route?: string,
-    isGameRoute: boolean
+    isGameRoute: boolean,
+    points: number
   },
   onChange: (name:string, callback: (value: any) => void) => void
 } = createStore({
   countriesData: undefined,
   activeCountries: [],
   route: undefined,
-  isGameRoute: false
+  isGameRoute: false,
+  points: 0
 });
 
 onChange('countriesData', value => {
