@@ -1,6 +1,7 @@
 import { Component, ComponentInterface, h, Host, JSX, Prop, State, Watch } from '@stencil/core';
 import { CountryData, CountryDataList } from '../../models/countries';
 import {
+  DEFAULT_COUNTRIES_OPTIONS,
   getAlertExtraMessage,
   getHigherPopulationCountry,
   getRandomCountries,
@@ -27,6 +28,7 @@ export class MapWithAction implements ComponentInterface {
   @State() countriesData?: CountryDataList
   @State() countriesOptions: CountryData[] = []
 
+
   @Watch('countriesData') private watchCountries() {
     if(!this.countriesData || !Object.keys(this.countriesData).length){
       return
@@ -34,12 +36,14 @@ export class MapWithAction implements ComponentInterface {
 
     if(this.game === "find-country"){
       // ToDO: avoid countries with a width less than 15, because they can't be clicked
-      this.country = getRandomCountry(this.countriesData)[1]
+      this.country = getRandomCountry(this.countriesData, this.previouslySelectedCountries)[1]
+      this.previouslySelectedCountries.add(this.country.code)
+
       state.activeCountries = Object.values(this.countriesData).map(option => option.code)
       return
     }
 
-    this.countriesOptions = getRandomCountries(this.countriesData)
+    this.countriesOptions = getRandomCountries(this.countriesData, DEFAULT_COUNTRIES_OPTIONS, this.previouslySelectedCountries)
 
     if(this.game === "guess-most-populated") {
       state.activeCountries = this.countriesOptions.map(option => option.code)
@@ -48,13 +52,18 @@ export class MapWithAction implements ComponentInterface {
     }
 
     const randomIndex = Math.floor(Math.random() * (this.countriesOptions.length - 1))
-    this.country = this.countriesOptions[randomIndex]
+    this.country = (this.countriesOptions.filter(
+      (country) => !this.previouslySelectedCountries.has(country.code)
+    ))[randomIndex]
+    this.previouslySelectedCountries.add(this.country.code)
+
     state.activeCountries = this.country?.code ? [this.country.code] : []
 
   }
 
+  private previouslySelectedCountries: Set<string> = new Set()
+
   componentWillLoad(): Promise<void> | void {
-    console.log('GAME', this.game)
 
     onStoreChange('countriesData', value => {
       this.countriesData = { ...value }

@@ -37,8 +37,14 @@ export const getAllCountries = async (): Promise<CountryDataList> => {
   }
 }
 
-export const getRandomCountry = (countries: CountryDataList, mustBeVisible?: true) => {
-  const countriesArray = Object.entries(countries)
+export const getRandomCountry = (
+  countries: CountryDataList,
+  previouslySelectedCountries: Set<string> = new Set(),
+  mustBeVisible?: true
+) => {
+  const countriesArray = Object.entries(countries).filter(
+    ([, country]) => !previouslySelectedCountries.has(country.code)
+  )
   const lastCountryIndex = countriesArray.length - 1
   const randomIndex = Math.floor(Math.random() * lastCountryIndex)
   const randomCountry = countriesArray[randomIndex]
@@ -56,12 +62,13 @@ export const getRandomCountry = (countries: CountryDataList, mustBeVisible?: tru
 
 export const getRandomCountries = (
   allCountries: CountryDataList,
-  numberOfCountries = DEFAULT_COUNTRIES_OPTIONS
+  numberOfCountries = DEFAULT_COUNTRIES_OPTIONS,
+  previouslySelectedCountries: Set<string> = new Set(),
 ) => {
   const randomCountries: CountryData[] = []
 
   while (randomCountries.length < numberOfCountries) {
-    const [, countryData] = getRandomCountry(allCountries)
+    const [, countryData] = getRandomCountry(allCountries, previouslySelectedCountries)
     if(!randomCountries.some(c => c.code === countryData.code )) {
       randomCountries.push(countryData);
     }

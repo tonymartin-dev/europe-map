@@ -9,7 +9,6 @@ export interface FindTheFlagProps {
 export const FindCountry: FunctionalComponent<FindTheFlagProps> = (
   {selectedCountry}
 ) => {
-  console.log({selectedCountry});
   return <div>
     <h1>¿Dónde está {selectedCountry.name}?</h1>
   </div>;

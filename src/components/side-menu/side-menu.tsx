@@ -5,7 +5,6 @@ export interface SideMenuProps {
 }
 
 export const SideMenu: FunctionalComponent<SideMenuProps> = ({parentRef}) => {
-  console.log({parentRef});
 
   return <ion-content>
     <ion-list>
