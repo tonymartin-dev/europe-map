@@ -1,4 +1,6 @@
 import { CountryData, CountryDataList, RawCountryData } from '../models/countries';
+import { state } from '../store/store';
+import { GameType } from '../models/routes';
 
 // ToDo: make it editable by setting difficulty level
 export const DEFAULT_COUNTRIES_OPTIONS = 3
@@ -81,3 +83,24 @@ export const getHigherPopulationCountry = (countriesOptions: CountryData[]) => {
 
 const getIntFromString = (string: string) =>
   Number.parseInt(string.replace(/\./g,''))
+
+const getCountryData = (countryCode: string) => {
+  return Object.values(state.countriesData).find(({code}) => countryCode === code)
+}
+
+export const getAlertExtraMessage = (gameType: GameType, selectedCountryCode: string) => {
+  const country = getCountryData(selectedCountryCode)
+  if(!country){
+    return ``
+  }
+
+  const messages: Record<GameType, string> = {
+    'find-flag': `Esta bandera es de ${country.name}`,
+    'guess-country-name': `Este país es ${country.name}`,
+    'guess-capital': `${country.capital} es la capital de ${country.name}`,
+    'guess-most-populated': `La población de ${country.capital} es de ${country.population} habitantes`,
+    'find-country': `Este país es ${country.name}`
+  }
+
+  return messages[gameType]
+}

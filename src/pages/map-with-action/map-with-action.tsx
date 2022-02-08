@@ -1,6 +1,11 @@
 import { Component, ComponentInterface, h, Host, JSX, Prop, State, Watch } from '@stencil/core';
 import { CountryData, CountryDataList } from '../../models/countries';
-import { getHigherPopulationCountry, getRandomCountries, getRandomCountry } from '../../services/countries';
+import {
+  getAlertExtraMessage,
+  getHigherPopulationCountry,
+  getRandomCountries,
+  getRandomCountry,
+} from '../../services/countries';
 import { onStoreChange, state } from '../../store/store';
 import { GuessCountryName } from './components/guess-country-name';
 import { FindFlag } from './components/find-flag';
@@ -125,11 +130,8 @@ export class MapWithAction implements ComponentInterface {
   }
 
   private async checkCountrySelection(countryCode: string) {
-    console.log('checkCountrySelection');
     const isCorrect = countryCode === this.country.code
-    const extraMsg = this.game === "guess-most-populated"
-      ? `${this.country.name} tiene ${this.country.population} habitantes.`
-      : undefined
+    const extraMsg = getAlertExtraMessage(this.game, countryCode)
     this.showAlert(isCorrect, extraMsg)
   }
 
@@ -137,7 +139,7 @@ export class MapWithAction implements ComponentInterface {
     if(isCorrect) {
       successAlert(extraMsg, () => this.watchCountries())
     } else {
-      failAlert()
+      failAlert(extraMsg)
     }
   }
 

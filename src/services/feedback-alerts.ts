@@ -14,10 +14,10 @@ export const successAlert = async (extraMsg?: string, onClose?: () => void) => {
   }
 }
 
-export const failAlert = async (onClose?: () => void) => {
+export const failAlert = async (extraMsg: string, onClose?: () => void) => {
   const alertRef = await alertController.create({
     header: 'Error',
-    message: 'Oh, has fallado 🙁  ¡Inténtalo de nuevo!',
+    message: `Oh, has fallado 🙁 ${extraMsg} ¡Inténtalo de nuevo!`,
     buttons: ['Continuar']
   })
 
