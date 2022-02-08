@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h, Host, JSX, Prop, State, Watch } from '@stencil/core';
+import { Component, ComponentInterface, Element, h, Host, JSX, Prop, State, Watch } from '@stencil/core';
 import { CountryData, CountryDataList } from '../../models/countries';
 import {
   DEFAULT_COUNTRIES_OPTIONS,
@@ -29,6 +29,7 @@ export class MapWithAction implements ComponentInterface {
   @State() countriesOptions: CountryData[] = []
   @State() attempts = 0
 
+  @Element() el!: HTMLAfMapWithActionElement
 
   @Watch('countriesData') private watchCountries() {
     if(!this.countriesData || !Object.keys(this.countriesData).length){
@@ -73,6 +74,20 @@ export class MapWithAction implements ComponentInterface {
 
     this.countriesData = { ...state.countriesData }
     this.watchCountries()
+  }
+
+  componentDidRender() {
+    const countriesSvgPaths = document.querySelectorAll('.country')
+    const selectedCountrySvgPath = Object.values(countriesSvgPaths)
+      .find(e =>
+        e.id.toUpperCase().split('-')?.[0] === this.country.code
+      )
+    const countryWidth = selectedCountrySvgPath?.getBoundingClientRect().width
+
+    if(this.game === "find-country" && countryWidth < 15) {
+      console.warn(`${this.country.name} is too small. Updating`);
+      this.watchCountries()
+    }
   }
 
   render(): JSX.Element {
@@ -150,7 +165,14 @@ export class MapWithAction implements ComponentInterface {
     if(isCorrect) {
       successAlert(extraMsg, () => this.watchCountries())
     } else {
-      failAlert(extraMsg, this.attempts >= 2 ? () => this.watchCountries() : undefined)
+      failAlert(
+        extraMsg,
+        this.attempts >= 2
+          ? () => {
+            this.attempts = 0
+            this.watchCountries();
+          }
+          : undefined)
     }
   }
 
@@ -158,8 +180,10 @@ export class MapWithAction implements ComponentInterface {
   private updatePoints(isCorrect: boolean) {
     if(isCorrect){
       state.points += 5
+      this.attempts = 0
     } else {
       state.points = state.points < 2 ? 0 : state.points - 2
+      this.attempts++
     }
   }
 
