@@ -38,7 +38,7 @@ export class MapWithAction implements ComponentInterface {
 
     if(this.game === "find-country"){
       // ToDO: avoid countries with a width less than 15, because they can't be clicked
-      this.country = getRandomCountry(this.countriesData, this.previouslySelectedCountries)[1]
+      this.country = getRandomCountry(this.countriesData, this.previouslySelectedCountries)
       this.previouslySelectedCountries.add(this.country.code)
 
       state.activeCountries = Object.values(this.countriesData).map(option => option.code)

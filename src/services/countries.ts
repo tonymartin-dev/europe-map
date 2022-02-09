@@ -40,24 +40,13 @@ export const getAllCountries = async (): Promise<CountryDataList> => {
 export const getRandomCountry = (
   countries: CountryDataList,
   previouslySelectedCountries: Set<string> = new Set(),
-  mustBeVisible?: true
 ) => {
   const countriesArray = Object.entries(countries).filter(
     ([, country]) => !previouslySelectedCountries.has(country.code)
   )
   const lastCountryIndex = countriesArray.length - 1
   const randomIndex = Math.floor(Math.random() * lastCountryIndex)
-  const randomCountry = countriesArray[randomIndex]
-  if(!mustBeVisible){
-    return randomCountry
-  }
-  // ToDo: Not in use because this isn't working since is executed before the render so it can't find the svg.
-  const countriesPaths = [...(document.querySelectorAll('.country') as any).values()]
-  const countriesElementsWithWidth = countriesPaths?.map(e => ({
-      code: e.id.split('-')[0].toUpperCase(),
-      width: e.getBoundingClientRect().width}
-    ))
-  console.log({countriesElementsWithWidth});
+  return countriesArray[randomIndex][1]
 }
 
 export const getRandomCountries = (
